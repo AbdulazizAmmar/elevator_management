@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence: Elevator Unit -->
+        <record id="seq_elevator_unit" model="ir.sequence">
+            <field name="name">Elevator Unit Serial</field>
+            <field name="code">elevator.unit</field>
+            <field name="prefix">ELV/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence: Elevator Work Order -->
+        <record id="seq_elevator_work_order" model="ir.sequence">
+            <field name="name">Elevator Work Order</field>
+            <field name="code">elevator.work.order</field>
+            <field name="prefix">EWO/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence: Elevator Service Contract -->
+        <record id="seq_elevator_contract" model="ir.sequence">
+            <field name="name">Elevator Service Contract</field>
+            <field name="code">elevator.contract</field>
+            <field name="prefix">EMC/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

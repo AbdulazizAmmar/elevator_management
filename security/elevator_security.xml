@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 1. Category -->
+        <record id="module_category_elevator" model="ir.module.category">
+            <field name="name">Elevator Operations</field>
+            <field name="description">Elevator multi-company management, installation work orders, and maintenance contracts.</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <!-- 2. Privileges (Odoo 19 3-Layer Hierarchy) -->
+        <record id="privilege_elevator_user" model="res.groups.privilege">
+            <field name="name">Elevator Field User</field>
+            <field name="sequence">1</field>
+            <field name="category_id" ref="module_category_elevator"/>
+        </record>
+
+        <record id="privilege_elevator_manager" model="res.groups.privilege">
+            <field name="name">Elevator Operations Manager</field>
+            <field name="sequence">2</field>
+            <field name="category_id" ref="module_category_elevator"/>
+        </record>
+
+        <!-- 3. Security Groups (NO 'users' field on res.groups in Odoo 19) -->
+        <record id="group_elevator_user" model="res.groups">
+            <field name="name">Technician / Operator</field>
+            <field name="privilege_id" ref="privilege_elevator_user"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_elevator_manager" model="res.groups">
+            <field name="name">Administrator / Manager</field>
+            <field name="privilege_id" ref="privilege_elevator_manager"/>
+            <field name="implied_ids" eval="[(4, ref('group_elevator_user'))]"/>
+        </record>
+
+        <!-- System Administrator Auto-Grant -->
+        <record id="base.group_system" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('elevator_management.group_elevator_manager'))]"/>
+        </record>
+    </data>
+</odoo>

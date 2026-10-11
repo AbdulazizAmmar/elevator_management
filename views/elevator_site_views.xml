@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_elevator_site_tree" model="ir.ui.view">
+        <field name="name">elevator.site.list</field>
+        <field name="model">elevator.site</field>
+        <field name="arch" type="xml">
+            <list string="Installation Sites">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="city"/>
+                <field name="floors_count"/>
+                <field name="machine_room_type"/>
+                <field name="unit_count" string="Units"/>
+                <field name="work_order_count" string="Jobs"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_elevator_site_form" model="ir.ui.view">
+        <field name="name">elevator.site.form</field>
+        <field name="model">elevator.site</field>
+        <field name="arch" type="xml">
+            <form string="Installation Site">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_units" type="object" class="oe_stat_button" icon="fa-building-o">
+                            <field name="unit_count" widget="statinfo" string="Elevator Units"/>
+                        </button>
+                        <button name="action_view_work_orders" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="work_order_count" widget="statinfo" string="Work Orders"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Site / Building Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Al-Noor Tower, Block B"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Client &amp; Contact">
+                            <field name="partner_id"/>
+                            <field name="contact_name"/>
+                            <field name="contact_phone"/>
+                            <field name="contact_email"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Site Location">
+                            <span class="o_form_label o_td_label" name="address_name">
+                                <b>Address</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city"/>
+                                <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True}"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="country_id" placeholder="Country" class="o_address_country" options="{'no_open': True}"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Shaft Specifications" name="shaft_specs">
+                            <group>
+                                <group string="Shaft Dimensions">
+                                    <field name="floors_count"/>
+                                    <field name="shaft_width"/>
+                                    <field name="shaft_depth"/>
+                                    <field name="pit_depth"/>
+                                    <field name="overhead_height"/>
+                                </group>
+                                <group string="Engineering &amp; Utilities">
+                                    <field name="machine_room_type"/>
+                                    <field name="power_supply"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Access / Site Notes" name="notes">
+                            <field name="notes" placeholder="Security gate clearance requirements, crane access, delivery hours..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_elevator_site_search" model="ir.ui.view">
+        <field name="name">elevator.site.search</field>
+        <field name="model">elevator.site</field>
+        <field name="arch" type="xml">
+            <search string="Search Installation Sites">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="city"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="City" name="group_city" domain="[]" context="{'group_by': 'city'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_elevator_site" model="ir.actions.act_window">
+        <field name="name">Installation Sites</field>
+        <field name="res_model">elevator.site</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new customer elevator installation site!
+            </p>
+        </field>
+    </record>
+</odoo>

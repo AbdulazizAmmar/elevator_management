@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_elevator_contract_tree" model="ir.ui.view">
+        <field name="name">elevator.contract.list</field>
+        <field name="model">elevator.contract</field>
+        <field name="arch" type="xml">
+            <list string="Service Contracts">
+                <field name="name"/>
+                <field name="contract_type"/>
+                <field name="partner_id"/>
+                <field name="site_id"/>
+                <field name="elevator_unit_id"/>
+                <field name="origin_company_id" string="Company A (Sales)" groups="base.group_multi_company"/>
+                <field name="company_id" string="Company B (Service)" groups="base.group_multi_company"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="next_visit_date"/>
+                <field name="work_order_count" string="Visits Done"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'active'"
+                       decoration-danger="state in ['expired', 'cancelled']"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_elevator_contract_form" model="ir.ui.view">
+        <field name="name">elevator.contract.form</field>
+        <field name="model">elevator.contract</field>
+        <field name="arch" type="xml">
+            <form string="Elevator Service Contract">
+                <header>
+                    <button name="action_schedule_maintenance_visit" string="Schedule Maintenance Visit 🛠" type="object" class="btn-primary" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_work_orders" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="work_order_count" widget="statinfo" string="Visits &amp; Inspections"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Contract Reference"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Client &amp; Asset">
+                            <field name="partner_id"/>
+                            <field name="site_id"/>
+                            <field name="elevator_unit_id"/>
+                            <field name="contract_type"/>
+                        </group>
+                        <group string="Multi-Company Setup">
+                            <field name="origin_company_id" string="Sales Company (Company A)" groups="base.group_multi_company"/>
+                            <field name="company_id" string="Service Operations Company (Company B)" groups="base.group_multi_company"/>
+                            <field name="sale_order_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Coverage Period">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Inspection Frequency">
+                            <field name="visit_interval_months"/>
+                            <field name="next_visit_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Maintenance Work Orders / Visits" name="visits">
+                            <field name="work_order_ids" readonly="1">
+                                <list string="Maintenance Visits">
+                                    <field name="name"/>
+                                    <field name="date_planned_start" string="Scheduled Date"/>
+                                    <field name="stage_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Terms &amp; Coverage Scope" name="terms">
+                            <field name="terms_and_conditions" placeholder="Details of warranty coverage, spare parts allowance from Company A, emergency response SLA..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_elevator_contract" model="ir.actions.act_window">
+        <field name="name">Elevator Service Contracts</field>
+        <field name="res_model">elevator.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+</odoo>

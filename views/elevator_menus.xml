@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_elevator_root"
+              name="Elevator Ops"
+              sequence="25"
+              web_icon="elevator_management,static/description/icon.png"
+              groups="elevator_management.group_elevator_user"/>
+
+    <!-- 1. Operations Menu -->
+    <menuitem id="menu_elevator_operations"
+              name="Field Operations"
+              parent="menu_elevator_root"
+              sequence="10"/>
+
+    <menuitem id="menu_elevator_work_orders"
+              name="Work Orders (Jobs)"
+              parent="menu_elevator_operations"
+              action="action_elevator_work_order"
+              sequence="10"/>
+
+    <menuitem id="menu_elevator_maintenance_visits"
+              name="Maintenance Visits"
+              parent="menu_elevator_operations"
+              action="action_elevator_work_order"
+              sequence="20"/>
+
+    <menuitem id="menu_elevator_repairs"
+              name="Repairs &amp; Spare Parts Jobs"
+              parent="menu_elevator_operations"
+              action="action_elevator_work_order_repair"
+              sequence="30"/>
+
+    <!-- 2. Equipment & Sites Menu -->
+    <menuitem id="menu_elevator_assets"
+              name="Sites &amp; Equipment"
+              parent="menu_elevator_root"
+              sequence="20"/>
+
+    <menuitem id="menu_elevator_sites"
+              name="Installation Sites"
+              parent="menu_elevator_assets"
+              action="action_elevator_site"
+              sequence="10"/>
+
+    <menuitem id="menu_elevator_units"
+              name="Elevator Assets"
+              parent="menu_elevator_assets"
+              action="action_elevator_unit"
+              sequence="20"/>
+
+    <!-- 3. Contracts Menu -->
+    <menuitem id="menu_elevator_contracts_parent"
+              name="Service Contracts"
+              parent="menu_elevator_root"
+              sequence="30"/>
+
+    <menuitem id="menu_elevator_contracts"
+              name="Warranty &amp; AMC Contracts"
+              parent="menu_elevator_contracts_parent"
+              action="action_elevator_contract"
+              sequence="10"/>
+
+    <!-- 4. Configuration Menu -->
+    <menuitem id="menu_elevator_config"
+              name="Configuration"
+              parent="menu_elevator_root"
+              sequence="90"
+              groups="elevator_management.group_elevator_manager"/>
+
+    <menuitem id="menu_elevator_stages"
+              name="Work Order Stages &amp; Gating"
+              parent="menu_elevator_config"
+              action="action_elevator_stage"
+              sequence="10"/>
+</odoo>

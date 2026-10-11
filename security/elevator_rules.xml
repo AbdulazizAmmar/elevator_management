@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Multi-Company Rule: Elevator Site -->
+        <record id="rule_elevator_site_multicompany" model="ir.rule">
+            <field name="name">Elevator Site Multi-Company</field>
+            <field name="model_id" ref="model_elevator_site"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Multi-Company Rule: Elevator Unit (Both Sales & Operations company can view) -->
+        <record id="rule_elevator_unit_multicompany" model="ir.rule">
+            <field name="name">Elevator Unit Multi-Company</field>
+            <field name="model_id" ref="model_elevator_unit"/>
+            <field name="domain_force">['|', '|', ('company_id', '=', False), ('company_id', 'in', company_ids), ('origin_company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Multi-Company Rule: Elevator Work Order (Executing Company B AND Sales Origin Company A have access) -->
+        <record id="rule_elevator_work_order_multicompany" model="ir.rule">
+            <field name="name">Elevator Work Order Multi-Company</field>
+            <field name="model_id" ref="model_elevator_work_order"/>
+            <field name="domain_force">['|', '|', ('company_id', '=', False), ('company_id', 'in', company_ids), ('origin_company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Multi-Company Rule: Elevator Contract -->
+        <record id="rule_elevator_contract_multicompany" model="ir.rule">
+            <field name="name">Elevator Contract Multi-Company</field>
+            <field name="model_id" ref="model_elevator_contract"/>
+            <field name="domain_force">['|', '|', ('company_id', '=', False), ('company_id', 'in', company_ids), ('origin_company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

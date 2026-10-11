@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_elevator_unit_tree" model="ir.ui.view">
+        <field name="name">elevator.unit.list</field>
+        <field name="model">elevator.unit</field>
+        <field name="arch" type="xml">
+            <list string="Elevator Assets">
+                <field name="name"/>
+                <field name="model_name"/>
+                <field name="partner_id"/>
+                <field name="site_id"/>
+                <field name="capacity_kg"/>
+                <field name="stops_count"/>
+                <field name="origin_company_id" groups="base.group_multi_company"/>
+                <field name="warranty_end_date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'planned'"
+                       decoration-warning="state == 'installation'"
+                       decoration-success="state == 'operational'"
+                       decoration-danger="state == 'out_of_service'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_elevator_unit_form" model="ir.ui.view">
+        <field name="name">elevator.unit.form</field>
+        <field name="model">elevator.unit</field>
+        <field name="arch" type="xml">
+            <form string="Elevator Unit">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="planned,installation,operational,maintenance"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_work_orders" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="work_order_count" widget="statinfo" string="Work Orders"/>
+                        </button>
+                        <button name="action_view_contracts" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="contract_count" widget="statinfo" string="Contracts"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Elevator Serial / Tag"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h3>
+                            <field name="model_name" placeholder="Package / Model (e.g. SkyLine 8P Passenger)"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Location &amp; Ownership">
+                            <field name="partner_id"/>
+                            <field name="site_id"/>
+                            <field name="origin_company_id" groups="base.group_multi_company"/>
+                            <field name="sale_order_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Commissioning &amp; Warranty">
+                            <field name="installation_date"/>
+                            <field name="warranty_end_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Technical Specifications" name="specs">
+                            <group>
+                                <group string="Capacity &amp; Performance">
+                                    <field name="capacity_kg"/>
+                                    <field name="persons_capacity"/>
+                                    <field name="speed_mps"/>
+                                    <field name="stops_count"/>
+                                </group>
+                                <group string="Mechanical &amp; Traction">
+                                    <field name="drive_type"/>
+                                    <field name="door_type"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_elevator_unit_search" model="ir.ui.view">
+        <field name="name">elevator.unit.search</field>
+        <field name="model">elevator.unit</field>
+        <field name="arch" type="xml">
+            <search string="Search Elevator Assets">
+                <field name="name"/>
+                <field name="model_name"/>
+                <field name="partner_id"/>
+                <field name="site_id"/>
+                <filter string="Operational" name="filter_operational" domain="[('state', '=', 'operational')]"/>
+                <filter string="In Installation" name="filter_installation" domain="[('state', '=', 'installation')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Site" name="group_site" domain="[]" context="{'group_by': 'site_id'}"/>
+                    <filter string="Customer" name="group_customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_elevator_unit" model="ir.actions.act_window">
+        <field name="name">Elevator Assets</field>
+        <field name="res_model">elevator.unit</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register an elevator physical unit!
+            </p>
+        </field>
+    </record>
+</odoo>

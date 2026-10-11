@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_elevator" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.elevator</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Header Button to Subcontract -->
+            <xpath expr="//header" position="inside">
+                <button name="action_subcontract_to_company_b"
+                        string="Dispatch to Company B (Work Order)"
+                        type="object"
+                        class="btn-success"
+                        invisible="not is_elevator_package or elevator_installation_state != 'pending_subcontract' or state not in ['sale', 'done']"/>
+            </xpath>
+
+            <!-- Smart Buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_elevator_work_order"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-cogs"
+                        invisible="not elevator_work_order_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Company B Job</span>
+                        <span class="o_stat_value">Work Order</span>
+                    </div>
+                </button>
+                <button name="action_view_elevator_contract"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-shield"
+                        invisible="elevator_job_type != 'installation' or elevator_installation_state != 'completed'">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">1-Year Warranty</span>
+                        <span class="o_stat_value">Service AMC</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Elevator Job Flag in Main Header/Form -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="is_elevator_package" string="Elevator Subcontract Job" widget="boolean_toggle"/>
+                <field name="elevator_job_type" invisible="not is_elevator_package" required="is_elevator_package"/>
+            </xpath>
+
+            <!-- Dedicated Notebook Page for Elevator Operations & Subcontracting -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Elevator Subcontracting (Co. B)" name="elevator_subcontract" invisible="not is_elevator_package">
+                    <group>
+                        <group string="Installation Site &amp; Unit Specs">
+                            <field name="elevator_job_type" readonly="elevator_installation_state != 'pending_subcontract'"/>
+                            <field name="elevator_unit_id"
+                                   options="{'no_create': True}"
+                                   domain="[('partner_id', '=', partner_id)]"
+                                   invisible="elevator_job_type == 'installation' and not elevator_unit_id"
+                                   required="elevator_job_type == 'repair'"/>
+                            <field name="elevator_site_id" required="is_elevator_package"/>
+                            <field name="elevator_unit_model"
+                                   placeholder="e.g. SkyLine 8-Passenger 630kg Gearless"
+                                   invisible="elevator_job_type == 'repair'"/>
+                        </group>
+                        <group string="Operations Subcontract Delegation (Company B)">
+                            <field name="subcontract_company_id" required="is_elevator_package"/>
+                            <label for="subcontract_budget" string="Subcontract Allocation"/>
+                            <div class="o_row">
+                                <field name="subcontract_budget" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <span class="text-muted">(Company B internal fee)</span>
+                            </div>
+                            <field name="elevator_installation_state" widget="badge"
+                                   decoration-info="elevator_installation_state == 'pending_subcontract'"
+                                   decoration-warning="elevator_installation_state == 'subcontracted'"
+                                   decoration-success="elevator_installation_state == 'completed'"/>
+                            <field name="elevator_work_order_id" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

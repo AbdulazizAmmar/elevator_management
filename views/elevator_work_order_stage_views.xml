@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_elevator_stage_tree" model="ir.ui.view">
+        <field name="name">elevator.work.order.stage.list</field>
+        <field name="model">elevator.work.order.stage</field>
+        <field name="arch" type="xml">
+            <list string="Work Order Stages" default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="stage_type"/>
+                <field name="require_document" widget="boolean_toggle"/>
+                <field name="required_doc_description"/>
+                <field name="can_bill_contractor" widget="boolean_toggle"/>
+                <field name="contractor_payment_percentage" string="Contractor Pay %"/>
+                <field name="is_closed" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_elevator_stage_form" model="ir.ui.view">
+        <field name="name">elevator.work.order.stage.form</field>
+        <field name="model">elevator.work.order.stage</field>
+        <field name="arch" type="xml">
+            <form string="Work Order Stage">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Stage Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. 1. Site Readiness &amp; Shaft Prep"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="sequence"/>
+                            <field name="stage_type"/>
+                            <field name="is_closed"/>
+                            <field name="fold"/>
+                        </group>
+                        <group string="Mandatory Document Gating">
+                            <field name="require_document"/>
+                            <field name="required_doc_description"
+                                   placeholder="Describe required checklist or paper to upload..."
+                                   invisible="not require_document"/>
+                        </group>
+                    </group>
+                    <group string="Contractor Milestone Billing">
+                        <group>
+                            <field name="can_bill_contractor"/>
+                            <field name="contractor_payment_percentage" invisible="not can_bill_contractor"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_elevator_stage" model="ir.actions.act_window">
+        <field name="name">Work Order Stages</field>
+        <field name="res_model">elevator.work.order.stage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
